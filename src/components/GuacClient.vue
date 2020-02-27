@@ -15,8 +15,8 @@
 
   Guacamole.Mouse = GuacMouse.mouse
 
-  const wsUrl = `ws://${location.host}/websocket-tunnel`
-  const httpUrl = `http://${location.host}/tunnel`
+  const wsUrl = `ws://localhost:8082/`
+  const httpUrl = `http://localhost:8082/`
 
   export default {
     components: {

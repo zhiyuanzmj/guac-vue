@@ -66,7 +66,8 @@
 
 <script>
   import GuacClient from '@/components/GuacClient'
-
+ import {AES,enc} from 'crypto-js'
+ import crypto from 'crypto-js'
   export default {
     name: 'app',
     components: {
@@ -98,14 +99,40 @@
           password: this.pass
         }
       },
-      query() {
-        const queryString = []
-        for (const [k, v] of Object.entries(this.queryObj)) {
-          if (v) {
-            queryString.push(`${k}=${encodeURIComponent(v)}`)
+      token() {
+        return {
+          connection:{
+            type:this.scheme,
+            settings:{
+              hostname: this.hostname,
+              port: this.port,
+              'ignore-cert': this.ignoreCert,
+              security: this.security,
+              username: this.user,
+              password: this.pass
+            }
           }
         }
-        return queryString.join("&")
+      },
+      query() {
+        // const queryString = []
+        // for (const [k, v] of Object.entries(this.queryObj)) {
+        //   if (v) {
+        //     queryString.push(`${k}=${encodeURIComponent(v)}`)
+        //   }
+        // }
+        // const result=queryString.join("&")
+        // const iv = crypto.enc.Hex.parse('1'.repeat(15).split(1).reduce(a=>a+=Math.floor(Math.random()*16).toString(16),''));
+        window.crypto1=crypto
+        window.enc=enc
+        // const iv=  crypto.enc.Hex.parse('f710b45f04e37709')
+         window.c=btoa(JSON.stringify(this.token))
+         window.AES=AES
+        const crypted = AES.encrypt(btoa(JSON.stringify(this.token)), 'MySuperSecretKeyForParamsToken12');
+        window.crypted=crypted
+        // window.a=JSON.stringify(this.data)
+        return 'token='+btoa(crypted.toString())
+        // return 'token='+crypto.AES.encrypt(btoa(JSON.stringify(this.token)),'MySuperSecretKeyForParamsToken12')
       },
       scrubbedQuery() {
         return this.query.replace(/password=[^& ]+/, 'password=****')
