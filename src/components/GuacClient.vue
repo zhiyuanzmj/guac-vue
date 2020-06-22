@@ -7,7 +7,7 @@
 </template>
 
 <script>
-  import Guacamole from 'guacamole-common-js'
+  import Guacamole from './guacamole-common-js'
   import GuacMouse from '@/lib/GuacMouse'
   import states from '@/lib/states'
   import clipboard from '@/lib/clipboard'
@@ -15,8 +15,11 @@
 
   Guacamole.Mouse = GuacMouse.mouse
 
-  const wsUrl = `ws://localhost:8082/`
-  const httpUrl = `http://localhost:8082/`
+  // const wsUrl = 'ws://localhost:8080/'
+  const wsUrl = 'ws://zmj:7001/'
+  // const wsUrl = `ws://${location.hostname}:8082/`
+  // const wsUrl = `ws://192.168.0.161:8082/`
+  const httpUrl = `http://${location.hostname}:8082/`
 
   export default {
     components: {
@@ -104,7 +107,7 @@
         let tunnel
 
         if (window.WebSocket && !this.forceHttp) {
-          tunnel = new Guacamole.WebSocketTunnel(wsUrl)
+          tunnel = new Guacamole.socketIOTunnel(wsUrl)
         } else {
           tunnel = new Guacamole.HTTPTunnel(httpUrl, true)
         }
